@@ -4,7 +4,7 @@
   "description": "Backend for the blog list application from full stack open 2020",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
@@ -26,6 +26,7 @@
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
+    "jest": "^26.1.0",
     "nodemon": "^2.0.4"
   }
 }
