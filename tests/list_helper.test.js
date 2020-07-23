@@ -104,3 +104,12 @@ describe("mostBlogs", () => {
     });
   });
 });
+
+describe("mostLikes", () => {
+  test("most likes", () => {
+    expect(listHelper.mostLikes(blogs)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17,
+    });
+  });
+});
