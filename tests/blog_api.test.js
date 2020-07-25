@@ -50,6 +50,20 @@ test("make a post", async () => {
   expect(titles).toContain("new blog")
 });
 
+test("missing likes", async () => {
+    let newBlog = new Blog({
+        title:"new blog without like",
+        author:"author",
+        url:"www.blog.new",
+    })
+
+
+    const response = await api.post("/api/blogs").send(newBlog)
+
+
+    expect(response.body.likes).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close();
 });
