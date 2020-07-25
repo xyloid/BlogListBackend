@@ -91,6 +91,18 @@ test('test delete',async()=>{
     await api.delete(`/api/blogs/${idToDelete}`).expect(204)
 })
 
+test('test update', async()=>{
+    let blogs = await (await api.get('/api/blogs')).body
+    let toBeUpdated = blogs[0]
+    // console.log(toBeUpdated)
+    toBeUpdated.likes = 10
+    // console.log(toBeUpdated)
+    let updatedBlog  = await (await api.put(`/api/blogs/${toBeUpdated.id}`).send(toBeUpdated)).body
+    // console.log(updatedBlog)
+    expect(updatedBlog.likes).toBe(10)
+
+})
+
 
 afterAll(() => {
   mongoose.connection.close();
