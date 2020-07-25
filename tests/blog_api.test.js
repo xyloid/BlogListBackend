@@ -23,6 +23,12 @@ test('number of blogs return should be correct', async ()=>{
     expect(blogs.body).toHaveLength(blogHelper.initialBlogs.length)
 })
 
+test('id property is defined', async ()=>{
+    let response = await api.get('/api/blogs')
+    let blogs =response.body    
+    blogs.map(blog=>{expect(blog.id).toBeDefined()})
+})
+
 
 afterAll(()=>{
     mongoose.connection.close()
