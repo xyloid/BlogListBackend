@@ -22,13 +22,9 @@ blogsRouter.get("/:id", (request, response, next) => {
 blogsRouter.post("/", (request, response, next) => {
   const body = request.body;
 
-  console.log("generate blog");
-
   const blog = new Blog({
     ...body,
   });
-
-  console.log("generate blog", blog);
 
   blog
     .save()
