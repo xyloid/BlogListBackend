@@ -46,24 +46,48 @@ test("make a post", async () => {
   const blogsInDb = await blogHelper.blogsInDb();
   expect(blogsInDb).toHaveLength(blogHelper.initialBlogs.length + 1);
 
-  const titles = blogsInDb.map((n) => n.title)
-  expect(titles).toContain("new blog")
+  const titles = blogsInDb.map((n) => n.title);
+  expect(titles).toContain("new blog");
 });
 
 test("missing likes", async () => {
+  let newBlog = new Blog({
+    title: "new blog without like",
+    author: "author",
+    url: "www.blog.new",
+  });
+
+  const response = await api.post("/api/blogs").send(newBlog);
+
+  expect(response.body.likes).toBe(0);
+});
+
+
+test("missing author", async()=>{
     let newBlog = new Blog({
-        title:"new blog without like",
-        author:"author",
-        url:"www.blog.new",
+        title:"title",
+        url:"url"
     })
 
+    await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+})
 
-    const response = await api.post("/api/blogs").send(newBlog)
+test("missing url", async()=>{
+    let newBlog = new Blog({
+        title:"title",
+        author:"author"
+    })
 
-
-    expect(response.body.likes).toBe(0)
+    await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
 })
 
 afterAll(() => {
   mongoose.connection.close();
 });
+
