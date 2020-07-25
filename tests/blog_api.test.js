@@ -84,6 +84,14 @@ describe("test about create a blog", () => {
   });
 });
 
+test('test delete',async()=>{
+    // create to be deleted
+    let blogs = await (await api.get('/api/blogs')).body
+    let idToDelete = blogs[0].id
+    await api.delete(`/api/blogs/${idToDelete}`).expect(204)
+})
+
+
 afterAll(() => {
   mongoose.connection.close();
 });
