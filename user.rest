@@ -14,6 +14,26 @@ Content-Type: application/json
 }
 
 ### 
+POST http://localhost:3003/api/login/
+Content-Type: application/json
+
+{
+    "username": "hellas",
+    "password":"pwd"
+}
+
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWYxZjAzMzdhZTY1YWUyMjFmNWU2YzY4IiwiaWF0IjoxNTk1OTUyODYwfQ.o8ITX-j4q8TWcPyJMuLqsH8srnjioTxObs6UPqHxy90
+
+{
+    "title":"new blog created by hellas",
+    "author":"Arto",
+    "url":"blog.com"
+}
+
+### 
 POST http://localhost:3003/api/users/
 Content-Type: application/json
 
