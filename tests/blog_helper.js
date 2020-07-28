@@ -80,36 +80,34 @@ const prepareUsers = async () => {
       username: user.username,
       name: user.name,
       passwordHash: await bcrypt.hash(user.password, saltRounds),
-      blogs:[]
+      blogs: [],
     }).save()
   );
   await Promise.all(users);
 };
 
 const setupBlogAndUser = async () => {
-  for (let blog of initialBlogs){
+  for (let blog of initialBlogs) {
     let user = await User.findOne({ name: blog.author });
     let blogIn = await Blog.findById(blog._id);
     // console.log(user)
     // console.log(blogIn)
-    blogIn.user = user._id
-    await blogIn.save()
-    let blogs = user.blogs
-    if(user.blogs){
-      console.log('concat blogs',blogs)
-      blogs = blogs.concat(blog._id)
-      console.log('after concat',blogs)
-    }else{
-      blogs = [blog._id]
+    blogIn.user = user._id;
+    await blogIn.save();
+    let blogs = user.blogs;
+    if (user.blogs) {
+      // console.log('concat blogs',blogs)
+      blogs = blogs.concat(blog._id);
+      // console.log('after concat',blogs)
+    } else {
+      blogs = [blog._id];
     }
-    console.log('user:',user,blogIn, blogs)
-    await User.update({name:user.name},{$set:{blogs:blogs}})
+    // console.log('user:',user,blogIn, blogs)
+    await User.update({ name: user.name }, { $set: { blogs: blogs } });
   }
-  
 
   // let tmp = initialBlogs.map(async (blog) => {
- 
-    
+
   //   // return user
   // });
   // // await Promise.all(tmp)

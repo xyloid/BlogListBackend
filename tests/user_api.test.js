@@ -8,21 +8,34 @@ const User = require("../models/user");
 
 
 
-beforeAll(async()=>{
+beforeEach(async()=>{
     // setup users
     await User.deleteMany({})
     await blogHelper.prepareUsers()
     await blogHelper.setupBlogAndUser()
 })
 
-// beforeEach(()=>{
-//     jest.useFakeTimers()
-// })
-
-test('dummy test',async ()=>{
-    console.log('dummy test')
-})
-
+describe("group test", () => {
+    test("blog list are returned as json", async () => {
+      await api
+        .get("/api/blogs")
+        .expect(200)
+        .expect("Content-Type", /application\/json/);
+    });
+  
+    test("number of blogs return should be correct", async () => {
+      let blogs = await api.get("/api/blogs");
+      expect(blogs.body).toHaveLength(blogHelper.initialBlogs.length);
+    });
+  
+    test("id property is defined", async () => {
+      let response = await api.get("/api/blogs");
+      let blogs = response.body;
+      blogs.map((blog) => {
+        expect(blog.id).toBeDefined();
+      });
+    });
+  });
 afterAll(()=>{
     mongoose.connection.close()
 })
