@@ -5,8 +5,10 @@ const User = require("../models/user");
 usersRouter.post("/", async (request, response) => {
   const body = request.body;
 
-  if(body.password.length<3){
-    return response.status(400).json({error:'password length should be more than 3 characters.'})
+  if (body.password.length < 3) {
+    return response
+      .status(400)
+      .json({ error: "password length should be more than 3 characters." });
   }
 
   const saltRounds = 10;
@@ -24,7 +26,11 @@ usersRouter.post("/", async (request, response) => {
 });
 
 usersRouter.get("/", async (request, response) => {
-  const users = await User.find({}).populate("notes");
+  const users = await User.find({}).populate("blogs", {
+    title: 1,
+    author: 1,
+    url: 1,
+  });
   response.json(users);
 });
 

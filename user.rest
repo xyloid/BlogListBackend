@@ -22,3 +22,24 @@ Content-Type: application/json
     "name":"Arto Hellas",
     "password":"pwd"
 }
+
+### test error user creation
+POST http://localhost:3003/api/users/
+Content-Type: application/json
+
+{
+    "username": "he",
+    "name":"Arto Hellas",
+    "password":"pwd"
+}
+
+### test error user creation
+POST http://localhost:3003/api/users/
+Content-Type: application/json
+
+{
+    "username": "heee",
+    "name":"Arto Hellas",
+    "password":"p"
+}
+

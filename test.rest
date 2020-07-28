@@ -1,11 +1,17 @@
 GET http://localhost:3003/api/blogs/
 
 ###
+GET http://localhost:3003/api/users/
+
+###
 POST http://localhost:3003/api/blogs/ HTTP/1.1
 Content-Type: application/json
 
 {
-
+    "title":"new blog created by usera 3",
+    "author":"User A",
+    "userId":"5f1f0272784cc319c44849d9",
+    "url":"usera.com"
 }
 
 ### 

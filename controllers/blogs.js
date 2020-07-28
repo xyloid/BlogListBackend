@@ -1,12 +1,13 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
-const { request } = require("../app");
-const { before } = require("lodash");
+const User = require("../models/user");
 
 blogsRouter.get("/", (request, response) => {
-  Blog.find({}).then((blogs) => {
-    response.json(blogs);
-  });
+  Blog.find({})
+    .populate("user", { username: 1, name: 1 })
+    .then((blogs) => {
+      response.json(blogs);
+    });
 });
 
 blogsRouter.get("/:id", (request, response, next) => {
@@ -21,16 +22,29 @@ blogsRouter.get("/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-blogsRouter.post("/", (request, response, next) => {
+blogsRouter.post("/", async (request, response, next) => {
   const body = request.body;
 
+  // Get userId
+
+  const user = await User.findById(body.userId);
+
+  if (!user) {
+    return response.status(400).json({ error: "can not find user" });
+  }
+
   const blog = new Blog({
-    ...body,
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    user: user._id,
   });
 
   blog
     .save()
     .then((savedBlog) => {
+      user.blogs = user.blogs.concat(savedBlog._id);
+      user.save();
       response.json(savedBlog);
     })
     .catch((error) => {
@@ -45,14 +59,15 @@ blogsRouter.delete("/:id", async (request, response, next) => {
 
 blogsRouter.put("/:id", async (request, response, next) => {
   const body = request.body;
+
   const newBlog = {
     title: body.title,
-    likes: body.likes,
     url: body.url,
+    likes:body.likes,
     author: body.author,
   };
 
-//   console.log("newblog",newBlog)
+  //   console.log("newblog",newBlog)
 
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
