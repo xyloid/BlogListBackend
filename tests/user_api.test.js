@@ -7,12 +7,28 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 
 
+let token = ""
+
+// beforeAll(async()=>{
+
+// })
 
 beforeEach(async()=>{
     // setup users
     await User.deleteMany({})
     await blogHelper.prepareUsers()
     await blogHelper.setupBlogAndUser()
+
+    let response = await api.post('/api/login').send({username:"mike",password:"secret"})
+    token = response.body.token
+    console.log(response.body,token)
+})
+
+describe("users", ()=>{
+    test("users", async()=>{
+        const users = await api.get("/api/users")
+        console.log(users.body)
+    })
 })
 
 describe("group test", () => {
@@ -36,6 +52,31 @@ describe("group test", () => {
       });
     });
   });
+
+describe('single blog entry test', ()=>{
+    test("make a post", async () => {
+        const newBlog = new Blog({
+          title: "new blog",
+          url: "www.blog.new",
+        });
+        await api
+          .post("/api/blogs")
+        //   .auth(token,{type:'bearer'})
+          .set("Authorization", `bearer ${token}`)
+          .send(newBlog)
+          .expect(200)
+          .expect("Content-Type", /application\/json/);
+    
+        const blogsInDb = await blogHelper.blogsInDb();
+        expect(blogsInDb).toHaveLength(blogHelper.initialBlogs.length + 1);
+    
+        const titles = blogsInDb.map((n) => n.title);
+        expect(titles).toContain("new blog");
+      });
+
+
+})
+
 afterAll(()=>{
     mongoose.connection.close()
 })

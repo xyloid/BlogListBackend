@@ -6,6 +6,9 @@ const User = require("../models/user");
 loginRouter.post("/", async (request, response) => {
   const body = request.body;
 
+  const users = await User.find({});
+  console.log(users);
+
   const user = await User.findOne({ username: body.username });
 
   const passwordCorrect =
@@ -13,7 +16,7 @@ loginRouter.post("/", async (request, response) => {
       ? false
       : await bcrypt.compare(body.password, user.passwordHash);
 
-    console.log(body)
+  console.log(body, user, passwordCorrect);
 
   if (!(user && passwordCorrect)) {
     return response.status(401).json({
@@ -30,7 +33,7 @@ loginRouter.post("/", async (request, response) => {
 
   response
     .status(200)
-    .json({ token, username: user.username, name: user.name });
+    .json({ token, username: user.username, name: user.name, id: user.id });
 });
 
-module.exports = loginRouter
+module.exports = loginRouter;

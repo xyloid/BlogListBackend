@@ -104,6 +104,7 @@ const setupBlogAndUser = async () => {
     }
     // console.log('user:',user,blogIn, blogs)
     await User.update({ name: user.name }, { $set: { blogs: blogs } });
+    // console.log(user)
   }
 
   // let tmp = initialBlogs.map(async (blog) => {
