@@ -1,4 +1,6 @@
 const Blog = require("../models/blog");
+const bcrypt = require('bcrypt');
+const User = require("../models/user");
 
 const initialBlogs = [
   {
@@ -54,6 +56,15 @@ const initialBlogs = [
   },
 ];
 
+const intialUsers = [
+  { username: "robert", name: "Robert C. Martin", password: "password" },
+  { username: "mike", name: "Mike Chan", password: "secret" },
+  { username: "edsgar", name: "Edsger W. Dijkstra", password: "programmer" },
+];
+
+
+
+
 const prepareBlogs = async () => {
   let blogs = initialBlogs.map((blog) => new Blog(blog));
   let promises = blogs.map((blog) => blog.save());
@@ -65,4 +76,15 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
-module.exports = { initialBlogs, prepareBlogs, blogsInDb };
+const prepareUsers = async ()=>{
+  const saltRounds = 10;
+  let users = intialUsers.map(async user=>new User({
+    username: user.username,
+    name:user.name,
+     passwordHash: await bcrypt.hash(user.password, saltRounds)
+  }).save())
+  console.log(users)
+  await Promise.all(users);
+}
+
+module.exports = { intialUsers,prepareUsers, initialBlogs, prepareBlogs, blogsInDb };

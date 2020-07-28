@@ -8,6 +8,7 @@ const Blog = require("../models/blog");
 beforeEach(async () => {
   await Blog.deleteMany({});
 
+
   await blogHelper.prepareBlogs();
 });
 
