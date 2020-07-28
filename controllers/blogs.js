@@ -59,8 +59,33 @@ blogsRouter.post("/", async (request, response, next) => {
 });
 
 blogsRouter.delete("/:id", async (request, response, next) => {
-  await Blog.findByIdAndRemove(request.params.id);
-  response.status(204).end();
+  const token = response.token
+  
+  const decodedToken = jwt.verify(token,process.env.SECRET)
+
+  if(!token || !decodedToken.id){
+    return response.status(401).json({error:'token missing or invalid'})
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  if (!user) {
+    return response.status(400).json({ error: "can not find user" });
+  }
+
+
+  const blogToDelete = await Blog.findById(request.params.id);
+console.log("User found ",user)
+console.log('Blog found ', blogToDelete)
+  if(user._id.toString() === blogToDelete.user.toString()){
+    await Blog.findByIdAndRemove(request.params.id);
+    // We don't need to update user blog list here. Interesting
+    response.status(204).end();
+  }else{
+    response.status(400).json({ error: "user has no permisson" });
+  }
+
+  
 });
 
 blogsRouter.put("/:id", async (request, response, next) => {
