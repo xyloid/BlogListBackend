@@ -28,8 +28,7 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWYxZjAzMzdhZTY1YWUyMjFmNWU2YzY4IiwiaWF0IjoxNTk1OTUyODYwfQ.o8ITX-j4q8TWcPyJMuLqsH8srnjioTxObs6UPqHxy90
 
 {
-    "title":"new blog created by hellas",
-    "author":"Arto",
+    "title":"new blog created by hellas with username",
     "url":"blog.com"
 }
 
