@@ -12,6 +12,7 @@ beforeAll(async()=>{
     // setup users
     await User.deleteMany({})
     await blogHelper.prepareUsers()
+    await blogHelper.setupBlogAndUser()
 })
 
 // beforeEach(()=>{

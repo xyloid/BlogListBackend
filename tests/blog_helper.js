@@ -1,5 +1,5 @@
 const Blog = require("../models/blog");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
 const initialBlogs = [
@@ -58,12 +58,9 @@ const initialBlogs = [
 
 const intialUsers = [
   { username: "robert", name: "Robert C. Martin", password: "password" },
-  { username: "mike", name: "Mike Chan", password: "secret" },
+  { username: "mike", name: "Michael Chan", password: "secret" },
   { username: "edsgar", name: "Edsger W. Dijkstra", password: "programmer" },
 ];
-
-
-
 
 const prepareBlogs = async () => {
   let blogs = initialBlogs.map((blog) => new Blog(blog));
@@ -76,15 +73,54 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
-const prepareUsers = async ()=>{
+const prepareUsers = async () => {
   const saltRounds = 10;
-  let users = intialUsers.map(async user=>new User({
-    username: user.username,
-    name:user.name,
-     passwordHash: await bcrypt.hash(user.password, saltRounds)
-  }).save())
-  console.log(users)
+  let users = intialUsers.map(async (user) =>
+    new User({
+      username: user.username,
+      name: user.name,
+      passwordHash: await bcrypt.hash(user.password, saltRounds),
+      blogs:[]
+    }).save()
+  );
   await Promise.all(users);
-}
+};
 
-module.exports = { intialUsers,prepareUsers, initialBlogs, prepareBlogs, blogsInDb };
+const setupBlogAndUser = async () => {
+  for (let blog of initialBlogs){
+    let user = await User.findOne({ name: blog.author });
+    let blogIn = await Blog.findById(blog._id);
+    // console.log(user)
+    // console.log(blogIn)
+    blogIn.user = user._id
+    await blogIn.save()
+    let blogs = user.blogs
+    if(user.blogs){
+      console.log('concat blogs',blogs)
+      blogs = blogs.concat(blog._id)
+      console.log('after concat',blogs)
+    }else{
+      blogs = [blog._id]
+    }
+    console.log('user:',user,blogIn, blogs)
+    await User.update({name:user.name},{$set:{blogs:blogs}})
+  }
+  
+
+  // let tmp = initialBlogs.map(async (blog) => {
+ 
+    
+  //   // return user
+  // });
+  // // await Promise.all(tmp)
+  // // tmp.map(i=>console.log(i))
+};
+
+module.exports = {
+  intialUsers,
+  prepareUsers,
+  initialBlogs,
+  prepareBlogs,
+  blogsInDb,
+  setupBlogAndUser,
+};
