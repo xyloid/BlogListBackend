@@ -30,16 +30,16 @@ blogsRouter.post("/", async (request, response, next) => {
   // console.log("blog post start")
 
   // const token = getTokenFrom(request)
-  const token = response.token
+  const token = response.token;
 
   // console.log("token:",token)
 
-  const decodedToken = jwt.verify(token,process.env.SECRET)
+  const decodedToken = jwt.verify(token, process.env.SECRET);
 
   // console.log("verify",decodedToken)
 
-  if(!token || !decodedToken.id){
-    return response.status(401).json({error:'token missing or invalid'})
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
   }
 
   // Get userId
@@ -64,12 +64,12 @@ blogsRouter.post("/", async (request, response, next) => {
 });
 
 blogsRouter.delete("/:id", async (request, response, next) => {
-  const token = response.token
-  
-  const decodedToken = jwt.verify(token,process.env.SECRET)
+  const token = response.token;
 
-  if(!token || !decodedToken.id){
-    return response.status(401).json({error:'token missing or invalid'})
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
   }
 
   const user = await User.findById(decodedToken.id);
@@ -78,19 +78,16 @@ blogsRouter.delete("/:id", async (request, response, next) => {
     return response.status(400).json({ error: "can not find user" });
   }
 
-
   const blogToDelete = await Blog.findById(request.params.id);
-console.log("User found ",user)
-console.log('Blog found ', blogToDelete)
-  if(user._id.toString() === blogToDelete.user.toString()){
+  // console.log("User found ", user);
+  // console.log("Blog found ", blogToDelete);
+  if (user._id.toString() === blogToDelete.user.toString()) {
     await Blog.findByIdAndRemove(request.params.id);
     // We don't need to update user blog list here. Interesting
     response.status(204).end();
-  }else{
+  } else {
     response.status(400).json({ error: "user has no permisson" });
   }
-
-  
 });
 
 blogsRouter.put("/:id", async (request, response, next) => {
