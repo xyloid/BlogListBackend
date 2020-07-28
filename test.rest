@@ -14,5 +14,15 @@ Content-Type: application/json
     "url":"usera.com"
 }
 
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "title":"new blog created by usera 4",
+    "author":"User A",
+    "url":"usera.com"
+}
+
 ### 
 DELETE http://localhost:3003/api/blogs/5f1900582c3c8dc85be55d6c
