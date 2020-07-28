@@ -7,7 +7,7 @@ loginRouter.post("/", async (request, response) => {
   const body = request.body;
 
   const users = await User.find({});
-  console.log(users);
+//   console.log(users);
 
   const user = await User.findOne({ username: body.username });
 
@@ -16,7 +16,7 @@ loginRouter.post("/", async (request, response) => {
       ? false
       : await bcrypt.compare(body.password, user.passwordHash);
 
-  console.log(body, user, passwordCorrect);
+//   console.log(body, user, passwordCorrect);
 
   if (!(user && passwordCorrect)) {
     return response.status(401).json({
@@ -33,7 +33,7 @@ loginRouter.post("/", async (request, response) => {
 
   response
     .status(200)
-    .json({ token, username: user.username, name: user.name, id: user.id });
+    .json({ token, username: user.username, name: user.name});
 });
 
 module.exports = loginRouter;

@@ -5,6 +5,7 @@ const api = supertest(app);
 const blogHelper = require("./blog_helper");
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const blog = require("../models/blog");
 
 
 let token = ""
@@ -16,18 +17,20 @@ let token = ""
 beforeEach(async()=>{
     // setup users
     await User.deleteMany({})
+    await Blog.deleteMany({})
+    await blogHelper.prepareBlogs()
     await blogHelper.prepareUsers()
     await blogHelper.setupBlogAndUser()
 
     let response = await api.post('/api/login').send({username:"mike",password:"secret"})
     token = response.body.token
-    console.log(response.body,token)
+    // console.log(response.body,token)
 })
 
 describe("users", ()=>{
     test("users", async()=>{
         const users = await api.get("/api/users")
-        console.log(users.body)
+        // console.log(users.body)
     })
 })
 
