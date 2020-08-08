@@ -98,6 +98,7 @@ blogsRouter.put("/:id", async (request, response, next) => {
     url: body.url,
     likes: body.likes,
     author: body.author,
+    comments:[]
   };
 
   //   console.log("newblog",newBlog)
