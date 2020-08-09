@@ -98,7 +98,7 @@ blogsRouter.put("/:id", async (request, response, next) => {
     url: body.url,
     likes: body.likes,
     author: body.author,
-    comments:[]
+    comments: [],
   };
 
   //   console.log("newblog",newBlog)
@@ -110,6 +110,24 @@ blogsRouter.put("/:id", async (request, response, next) => {
       { new: true }
     );
     response.json(updatedBlog);
+  } catch (exception) {
+    next(exception);
+  }
+});
+
+blogsRouter.put("/:id/comment", async (request, response, next) => {
+  const body = request.body;
+  console.log("get comment", body);
+  try {
+    const blog = await Blog.findById(request.params.id);
+    console.log(blog.comments);
+    const updated = await Blog.findByIdAndUpdate(
+      request.params.id,
+      { comments: [...blog.comments, body.comment] },
+      { new: true }
+    );
+    response.json(updated);
+    // await blog.update()
   } catch (exception) {
     next(exception);
   }

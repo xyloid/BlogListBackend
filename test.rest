@@ -1,6 +1,14 @@
 GET http://localhost:3003/api/blogs/
 
 ###
+PUT http://localhost:3003/api/blogs/5a422a851b54a676234d17f7/comment
+Content-Type: application/json
+
+{
+    "comment":"this is a comment"
+}
+
+###
 DELETE http://localhost:3003/api/blogs/5f1900582c3c8dc85be55d6c
 
 ###
